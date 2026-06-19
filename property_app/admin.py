@@ -13,7 +13,6 @@ class PropertyImageInline(admin.TabularInline):
     fields = (
         "image",
         "image_preview",
-        "url",
         "caption",
     )
 

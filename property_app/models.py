@@ -57,18 +57,13 @@ class PropertyImage(models.Model):
         related_name="images"
     )
 
-    url = models.URLField(
-        blank=True
-    )
-
     caption = models.CharField(
         max_length=255,
         blank=True
     )
 
     image = models.ImageField(
-        upload_to="property_images/"
+        upload_to="property_images/",
+        blank=True,
+        null=True,
     )
-
-    def __str__(self):
-        return self.caption or f"Image {self.pk}"

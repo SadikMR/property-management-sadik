@@ -6,7 +6,6 @@ from django.contrib.gis.geos import Point
 from property_app.models import (
     Location,
     Property,
-    PropertyImage,
 )
 
 
@@ -20,7 +19,6 @@ class Command(BaseCommand):
 
         created_locations = 0
         created_properties = 0
-        created_images = 0
 
         for _, row in df.iterrows():
 
@@ -39,7 +37,7 @@ class Command(BaseCommand):
             if location_created:
                 created_locations += 1
 
-            property_obj = Property.objects.create(
+            Property.objects.create(
                 location=location,
                 name=row["property_name"],
                 description=row["description"],
@@ -52,14 +50,6 @@ class Command(BaseCommand):
 
             created_properties += 1
 
-            PropertyImage.objects.create(
-                property=property_obj,
-                url=row["image_url"],
-                caption=row["caption"],
-            )
-
-            created_images += 1
-
         self.stdout.write(
             self.style.SUCCESS(
                 f"""
@@ -67,7 +57,6 @@ Import completed successfully
 
 Locations created : {created_locations}
 Properties created: {created_properties}
-Images created    : {created_images}
 """
             )
         )
