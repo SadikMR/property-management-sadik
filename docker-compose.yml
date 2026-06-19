@@ -1,6 +1,9 @@
 services:
   postgres:
-    build: .
+    build:
+      context: .
+      target: postgres
+
     container_name: postgres-postgis-pgvector
 
     environment:
@@ -11,8 +14,18 @@ services:
     ports:
       - "5442:5432"
 
-    volumes:
-      - postgres_data:/var/lib/postgresql
+  django:
+    build:
+      context: .
+      target: django
 
-volumes:
-  postgres_data:
+    container_name: django-app
+
+    ports:
+      - "8000:8000"
+
+    volumes:
+      - .:/app
+
+    depends_on:
+      - postgres
