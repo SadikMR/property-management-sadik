@@ -1,3 +1,5 @@
+from django.core.paginator import Paginator
+
 from django.shortcuts import (
     render,
     get_object_or_404,
@@ -30,12 +32,25 @@ def property_list(request):
         location__in=locations
     )
 
+    paginator = Paginator(
+        properties,
+        2
+    )
+
+    page_number = request.GET.get(
+        "page"
+    )
+
+    page_obj = paginator.get_page(
+        page_number
+    )
+
     return render(
         request,
         "property_list.html",
         {
             "query": query,
-            "properties": properties,
+            "page_obj": page_obj,
         },
     )
 

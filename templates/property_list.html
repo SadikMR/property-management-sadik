@@ -1,4 +1,4 @@
-{% for property in properties %}
+{% for property in page_obj %}
 
 <div>
 
@@ -23,5 +23,35 @@
 </div>
 
 <hr>
+
+<hr>
+
+<div>
+
+    {% if page_obj.has_previous %}
+        <a href="?location={{ query }}&page=1">
+            First
+        </a>
+
+        <a href="?location={{ query }}&page={{ page_obj.previous_page_number }}">
+            Previous
+        </a>
+    {% endif %}
+
+    Page {{ page_obj.number }}
+    of
+    {{ page_obj.paginator.num_pages }}
+
+    {% if page_obj.has_next %}
+        <a href="?location={{ query }}&page={{ page_obj.next_page_number }}">
+            Next
+        </a>
+
+        <a href="?location={{ query }}&page={{ page_obj.paginator.num_pages }}">
+            Last
+        </a>
+    {% endif %}
+
+</div>
 
 {% endfor %}
