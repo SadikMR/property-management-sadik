@@ -29,6 +29,11 @@
     {{ property.amenities }}
 </p>
 
+<p>
+    <strong>Distance from {{ property.location.name }} center:</strong>
+    {{ property.distance_from_location.km|floatformat:2 }} km
+</p>
+
 <hr>
 
 <h2>Images</h2>

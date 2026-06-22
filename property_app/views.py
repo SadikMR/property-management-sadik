@@ -4,6 +4,12 @@ from django.shortcuts import (
     render,
     get_object_or_404,
 )
+from django.contrib.gis.db.models.functions import Distance
+from django.db.models import F
+from django.shortcuts import (
+    render,
+    get_object_or_404,
+)
 
 from .models import (
     Location,
@@ -57,8 +63,13 @@ def property_list(request):
 
 def property_detail(request, slug):
     property = get_object_or_404(
-        Property,
-        slug=slug
+        Property.objects.annotate(
+            distance_from_location=Distance(
+                "center",
+                F("location__center")
+            )
+        ),
+        slug=slug,
     )
 
     return render(
