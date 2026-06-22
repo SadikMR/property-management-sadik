@@ -31,40 +31,44 @@ class PropertyImageInline(admin.TabularInline):
 class LocationAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "city",
         "country",
     )
 
     search_fields = (
         "name",
-        "city",
         "country",
     )
 
     list_filter = (
         "country",
-        "city",
     )
 
 
 @admin.register(Property)
 class PropertyAdmin(admin.ModelAdmin):
     list_display = (
-        "name",
+        "title",
+        "property_type",
+        "price",
         "location",
+        "slug",
     )
 
     search_fields = (
-        "name",
+        "title",
         "description",
         "location__name",
-        "location__city",
+        "location__country",
     )
 
     list_filter = (
+        "property_type",
         "location__country",
-        "location__city",
     )
+
+    prepopulated_fields = {
+        "slug": ("title",)
+    }
 
     inlines = [PropertyImageInline]
 
@@ -79,7 +83,7 @@ class PropertyImageAdmin(admin.ModelAdmin):
 
     search_fields = (
         "caption",
-        "property__name",
+        "property__title",
     )
 
     def image_preview(self, obj):

@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<div class="max-w-6xl mx-auto px-4 py-12">
+    <!-- Search Section -->
+    <div class="bg-white rounded-lg shadow-md p-8 mb-12">
+        <h1 class="text-4xl font-bold text-emerald-900 mb-2">Welcome to PropertyHub</h1>
+        <p class="text-gray-600 mb-6">Discover your perfect property</p>
+
+        <form id="search-form" class="flex gap-2" action="{% url 'property_list' %}" method="get">
+            <input
+                type="text"
+                id="search-input"
+                name="location"
+                placeholder="Search by location"
+                value="{{ query }}"
+                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600"
+                autocomplete="off"
+            >
+            <button
+                type="submit"
+                class="px-6 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-lg transition-colors"
+            >
+                Search
+            </button>
+        </form>
+    </div>
+
+    <!-- Featured Properties Header -->
+    <div class="mb-6 flex items-center justify-between">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 mb-2">Featured Properties</h2>
+            <p class="text-gray-600">Discover our selected properties</p>
+        </div>
+        <div>
+            <a href="{% url 'property_list' %}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg border border-gray-300">
+                Show All
+            </a>
+        </div>
+    </div>
+
+    <!-- Property Grid Container -->
+    <div id="property-grid-container">
+        {% include "property_grid.html" %}
+    </div>
+</div>
+
+{% endblock %}
+

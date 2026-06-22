@@ -3,14 +3,16 @@ from pgvector.django import VectorField
 
 
 class Location(models.Model):
-    country = models.CharField(max_length=100)
+    country = models.CharField(
+        max_length=100
+    )
 
-    city = models.CharField(max_length=100)
-
-    name = models.CharField(max_length=255)
+    name = models.CharField(
+        max_length=255
+    )
 
     name_embedding = VectorField(
-        dimensions=384,  
+        dimensions=384,
         null=True,
         blank=True
     )
@@ -21,7 +23,7 @@ class Location(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name}, {self.city}"
+        return f"{self.name}, {self.country}"
 
 
 class Property(models.Model):
@@ -31,7 +33,22 @@ class Property(models.Model):
         related_name="properties"
     )
 
-    name = models.CharField(max_length=255)
+    title = models.CharField(
+        max_length=255
+    )
+
+    slug = models.SlugField(
+        unique=True
+    )
+
+    property_type = models.CharField(
+        max_length=100
+    )
+
+    price = models.DecimalField(
+        max_digits=12,
+        decimal_places=2
+    )
 
     description = models.TextField(
         blank=True
@@ -47,7 +64,7 @@ class Property(models.Model):
     )
 
     def __str__(self):
-        return self.name
+        return self.title
 
 
 class PropertyImage(models.Model):
@@ -67,3 +84,6 @@ class PropertyImage(models.Model):
         blank=True,
         null=True,
     )
+
+    def __str__(self):
+        return self.caption or f"Image for {self.property.title}"
