@@ -31,19 +31,16 @@ class PropertyImageInline(admin.TabularInline):
 class LocationAdmin(admin.ModelAdmin):
     list_display = (
         "name",
-        "city",
         "country",
     )
 
     search_fields = (
         "name",
-        "city",
         "country",
     )
 
     list_filter = (
         "country",
-        "city",
     )
 
 
@@ -54,19 +51,19 @@ class PropertyAdmin(admin.ModelAdmin):
         "property_type",
         "price",
         "location",
+        "slug",
     )
 
     search_fields = (
         "title",
         "description",
         "location__name",
-        "location__city",
+        "location__country",
     )
 
     list_filter = (
         "property_type",
         "location__country",
-        "location__city",
     )
 
     prepopulated_fields = {

@@ -7,10 +7,6 @@ class Location(models.Model):
         max_length=100
     )
 
-    city = models.CharField(
-        max_length=100
-    )
-
     name = models.CharField(
         max_length=255
     )
@@ -27,7 +23,7 @@ class Location(models.Model):
     )
 
     def __str__(self):
-        return f"{self.name}, {self.city}"
+        return f"{self.name}, {self.country}"
 
 
 class Property(models.Model):
@@ -42,19 +38,16 @@ class Property(models.Model):
     )
 
     slug = models.SlugField(
-        unique=True,
-        default=""
+        unique=True
     )
-    
+
     property_type = models.CharField(
-        max_length=100,
-        default=""
+        max_length=100
     )
 
     price = models.DecimalField(
         max_digits=12,
-        decimal_places=2,
-        default=0
+        decimal_places=2
     )
 
     description = models.TextField(

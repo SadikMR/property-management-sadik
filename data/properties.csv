@@ -1,6 +1,41 @@
-country,city,location_name,property_title,slug,property_type,price,description,amenities,latitude,longitude
-Bangladesh,Dhaka,Gulshan,Luxury Apartment,luxury-apartment,Apartment,120000,Modern apartment in Gulshan,WiFi;Pool;Parking,23.7925,90.4078
-Bangladesh,Dhaka,Banani,Modern Condo,modern-condo,Condo,95000,Comfortable condo near Banani Lake,WiFi;Gym;Parking,23.7937,90.4066
-Bangladesh,Dhaka,Dhanmondi,Lake View Flat,lake-view-flat,Apartment,85000,Beautiful lake view property,WiFi;Balcony,23.7465,90.3760
-USA,Florida,Destin,Beach House,beach-house,House,450000,Luxury beach house with ocean access,Pool;Beach Access;WiFi,30.3935,-86.4958
-USA,Florida,Miami,Oceanfront Villa,oceanfront-villa,Villa,750000,Oceanfront villa with private pool,Pool;WiFi;Parking;Gym,25.7617,-80.1918
+country,location_name,location_latitude,location_longitude,property_title,property_type,price,description,amenities,property_latitude,property_longitude
+USA,Manhattan,40.7831,-73.9712,Luxury Penthouse,Penthouse,2500000,Premium penthouse in Manhattan skyline,Pool;Gym;Parking,40.7870,-73.9670
+USA,Manhattan,40.7831,-73.9712,Central Park Condo,Condo,1800000,Condo overlooking Central Park,Gym;WiFi;Parking,40.7850,-73.9690
+USA,Brooklyn,40.6782,-73.9442,Modern Townhouse,Townhouse,1200000,Spacious family townhouse,Garden;Parking;WiFi,40.6820,-73.9400
+USA,Brooklyn,40.6782,-73.9442,Urban Loft,Loft,950000,Industrial style loft near downtown,Gym;WiFi,40.6800,-73.9420
+USA,San Francisco,37.7749,-122.4194,Bay View Apartment,Apartment,1600000,Apartment with bay views,Gym;Parking;WiFi,37.7780,-122.4150
+USA,San Francisco,37.7749,-122.4194,Tech Executive Condo,Condo,1900000,Luxury condo for professionals,Gym;Pool;WiFi,37.7770,-122.4170
+
+Canada,Toronto,43.6532,-79.3832,Downtown Residence,Apartment,1100000,Modern residence in Toronto core,Gym;Parking;WiFi,43.6570,-79.3790
+Canada,Toronto,43.6532,-79.3832,Lakeside Condo,Condo,1250000,Condo near waterfront,Pool;Gym;WiFi,43.6560,-79.3810
+Canada,Vancouver,49.2827,-123.1207,Harbor View Condo,Condo,1450000,Condo overlooking Vancouver harbor,Gym;Pool;Parking,49.2860,-123.1160
+Canada,Vancouver,49.2827,-123.1207,Mountain View Residence,Apartment,1350000,Residence with mountain views,Gym;WiFi;Parking,49.2850,-123.1180
+
+UK,London,51.5074,-0.1278,Mayfair Luxury Apartment,Apartment,2800000,Luxury apartment in Mayfair,Gym;Concierge;Parking,51.5110,-0.1230
+UK,London,51.5074,-0.1278,Thames Riverside Condo,Condo,2100000,Condo beside the Thames,Gym;Pool;WiFi,51.5100,-0.1250
+UK,Manchester,53.4808,-2.2426,City Centre Loft,Loft,750000,Modern loft in Manchester centre,Gym;WiFi,53.4840,-2.2380
+UK,Manchester,53.4808,-2.2426,Executive Apartment,Apartment,850000,Apartment near business district,Parking;WiFi;Gym,53.4830,-2.2400
+
+Germany,Berlin,52.5200,13.4050,Berlin Urban Flat,Apartment,780000,Stylish apartment in Berlin,WiFi;Parking,52.5240,13.4090
+Germany,Berlin,52.5200,13.4050,Riverside Residence,Apartment,920000,Residence near the river,Gym;WiFi;Parking,52.5230,13.4070
+
+France,Paris,48.8566,2.3522,Eiffel Luxury Suite,Apartment,1900000,Premium apartment near Eiffel Tower,WiFi;Balcony;Parking,48.8600,2.3560
+France,Paris,48.8566,2.3522,Historic Paris Residence,Apartment,1700000,Residence in historic district,Gym;WiFi,48.8590,2.3550
+
+Spain,Madrid,40.4168,-3.7038,Central Madrid Condo,Condo,890000,Condo in Madrid city centre,Gym;WiFi;Parking,40.4200,-3.6990
+Spain,Madrid,40.4168,-3.7038,Executive Residence,Apartment,980000,Premium residence in Madrid,Gym;Pool;WiFi,40.4190,-3.7010
+
+UAE,Dubai,25.2048,55.2708,Palm Jumeirah Villa,Villa,3200000,Luxury villa on Palm Jumeirah,Pool;Gym;WiFi,25.2090,55.2750
+UAE,Dubai,25.2048,55.2708,Downtown Skyline Apartment,Apartment,1800000,Apartment with skyline views,Gym;Pool;WiFi,25.2070,55.2730
+
+Singapore,Singapore,1.3521,103.8198,Marina Bay Residence,Apartment,2400000,Luxury residence near Marina Bay,Gym;Pool;WiFi,1.3560,103.8240
+Singapore,Singapore,1.3521,103.8198,Executive Condo,Condo,1700000,Modern executive condominium,Gym;Parking;WiFi,1.3550,103.8220
+
+Australia,Sydney,-33.8688,151.2093,Sydney Harbour Apartment,Apartment,2100000,Apartment overlooking Sydney Harbour,Gym;Pool;Parking,-33.8640,151.2140
+Australia,Sydney,-33.8688,151.2093,Waterfront Residence,Residence,2500000,Luxury waterfront property,Pool;WiFi;Parking,-33.8650,151.2130
+
+Japan,Tokyo,35.6762,139.6503,Shibuya Premium Apartment,Apartment,1600000,Modern apartment in Tokyo,Gym;WiFi;Parking,35.6800,139.6550
+Japan,Tokyo,35.6762,139.6503,Executive Tower Condo,Condo,1850000,High-rise condo with city views,Gym;Pool;WiFi,35.6790,139.6540
+
+India,Bangalore,12.9716,77.5946,Tech Park Residence,Apartment,450000,Apartment near technology district,Gym;Parking;WiFi,12.9750,77.5990
+India,Bangalore,12.9716,77.5946,Garden City Villa,Villa,850000,Family villa with garden,Garden;Parking;WiFi,12.9740,77.5980

@@ -2,6 +2,7 @@ import pandas as pd
 
 from django.core.management.base import BaseCommand
 from django.contrib.gis.geos import Point
+from django.utils.text import slugify
 
 from property_app.models import (
     Location,
@@ -10,7 +11,7 @@ from property_app.models import (
 
 
 class Command(BaseCommand):
-    help = "Import vacation rental properties from CSV"
+    help = "Import properties from CSV"
 
     def handle(self, *args, **kwargs):
         csv_file = "data/properties.csv"
@@ -25,12 +26,11 @@ class Command(BaseCommand):
             location, location_created = (
                 Location.objects.get_or_create(
                     country=row["country"],
-                    city=row["city"],
                     name=row["location_name"],
                     defaults={
                         "center": Point(
-                            float(row["longitude"]),
-                            float(row["latitude"]),
+                            float(row["location_longitude"]),
+                            float(row["location_latitude"]),
                             srid=4326,
                         )
                     },
@@ -43,14 +43,14 @@ class Command(BaseCommand):
             Property.objects.create(
                 location=location,
                 title=row["property_title"],
-                slug=row["slug"],
+                slug=slugify(row["property_title"]),
                 property_type=row["property_type"],
                 price=row["price"],
                 description=row["description"],
                 amenities=row["amenities"],
                 center=Point(
-                    float(row["longitude"]),
-                    float(row["latitude"]),
+                    float(row["property_longitude"]),
+                    float(row["property_latitude"]),
                     srid=4326,
                 ),
             )
