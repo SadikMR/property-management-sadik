@@ -1,3 +1,5 @@
+import re
+
 from django.core.paginator import Paginator
 
 from django.shortcuts import (
@@ -93,10 +95,19 @@ def property_detail(request, slug):
         slug=slug,
     )
 
+    amenities_list = []
+    if property.amenities:
+        amenities_list = [
+            amenity.strip()
+            for amenity in re.split(r"[;,\n]", property.amenities)
+            if amenity.strip()
+        ]
+
     return render(
         request,
         "property_detail.html",
         {
             "property": property,
+            "amenities_list": amenities_list,
         },
     )
