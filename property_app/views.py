@@ -1,17 +1,9 @@
 import re
 
 from django.core.paginator import Paginator
-
-from django.shortcuts import (
-    render,
-    get_object_or_404,
-)
+from django.shortcuts import render, get_object_or_404
 from django.contrib.gis.db.models.functions import Distance
 from django.db.models import F
-from django.shortcuts import (
-    render,
-    get_object_or_404,
-)
 
 from .models import (
     Location,
@@ -36,15 +28,11 @@ def home(request):
     page_number = request.GET.get("page")
     page_obj = paginator.get_page(page_number)
 
-    context = {
+    return render(request, "home.html", {
         "query": query,
         "page_obj": page_obj,
-    }
+    })
 
-    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
-        return render(request, "property_grid.html", context)
-
-    return render(request, "home.html", context)
 
 
 def property_list(request):
