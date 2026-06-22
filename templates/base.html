@@ -1,19 +1,86 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>PropertyHub - Find Your Dream Property</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="PropertyHub — Discover premium properties worldwide.">
+    <title>PropertyHub — Find Your Dream Property</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    colors: {
+                        primary: {
+                            50:  '#fffbeb',
+                            100: '#fef3c7',
+                            200: '#fde68a',
+                            300: '#fcd34d',
+                            400: '#fbbf24',
+                            500: '#f59e0b',
+                            600: '#d97706',
+                            700: '#b45309',
+                            800: '#92400e',
+                            900: '#78350f',
+                            950: '#451a03',
+                        },
+                    },
+                },
+            },
+        }
+    </script>
+    <style>
+        html {
+            scroll-behavior: smooth;
+            -webkit-font-smoothing: antialiased;
+        }
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(10px); }
+            to   { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in { animation: fadeInUp 0.4s ease-out both; }
+        .card-hover { transition: transform 0.2s ease, box-shadow 0.2s ease; }
+        .card-hover:hover { transform: translateY(-3px); box-shadow: 0 8px 24px -4px rgba(0,0,0,0.1); }
+        .img-zoom { transition: transform 0.35s ease; }
+        .img-zoom:hover { transform: scale(1.04); }
+    </style>
 </head>
-<body class="bg-gray-50">
+<body class="bg-gray-50 font-sans text-gray-800 min-h-screen flex flex-col">
 
-<nav class="bg-gradient-to-r from-emerald-700 to-emerald-800 shadow-md">
-    <div class="max-w-6xl mx-auto px-4 py-4">
-        <a href="/" class="text-xl font-bold text-white hover:text-emerald-100 transition-colors">PropertyHub</a>
-    </div>
-</nav>
+    <!-- Nav -->
+    <nav class="bg-white border-b border-gray-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-14">
+                <a href="/" class="text-xl font-bold text-gray-900 tracking-tight">
+                    Property<span class="text-primary-600">Hub</span>
+                </a>
+                <div class="flex items-center gap-1">
+                    <a href="/" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-primary-700 rounded-lg transition-colors">Home</a>
+                    <a href="{% url 'property_list' %}" class="px-4 py-2 text-sm font-medium text-gray-500 hover:text-primary-700 rounded-lg transition-colors">Browse</a>
+                </div>
+            </div>
+        </div>
+    </nav>
 
-{% block content %}
-{% endblock %}
+    <main class="flex-1">
+        {% block content %}{% endblock %}
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-primary-900 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-3">
+                <span class="text-base font-bold text-white tracking-tight">Property<span class="text-primary-400">Hub</span></span>
+                <p class="text-sm text-primary-200/60">&copy; 2026 PropertyHub. All rights reserved.</p>
+            </div>
+        </div>
+    </footer>
 
 </body>
 </html>

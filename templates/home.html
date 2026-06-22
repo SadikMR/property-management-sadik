@@ -2,49 +2,55 @@
 
 {% block content %}
 
-<div class="max-w-6xl mx-auto px-4 py-12">
-    <!-- Search Section -->
-    <div class="bg-white rounded-lg shadow-md p-8 mb-12">
-        <h1 class="text-4xl font-bold text-emerald-900 mb-2">Welcome to PropertyHub</h1>
-        <p class="text-gray-600 mb-6">Discover your perfect property</p>
+<!-- Hero — light warm background -->
+<section class="bg-primary-50 border-b border-primary-100">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
+        <div class="max-w-2xl mx-auto text-center animate-fade-in">
+            <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
+                Find your dream property
+            </h1>
+            <p class="text-base text-gray-500 mb-8">
+                Explore curated properties across the globe. Your perfect home awaits.
+            </p>
 
-        <form id="search-form" class="flex gap-2" action="{% url 'property_list' %}" method="get">
-            <input
-                type="text"
-                id="search-input"
-                name="location"
-                placeholder="Search by location"
-                value="{{ query }}"
-                class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-emerald-600"
-                autocomplete="off"
-            >
-            <button
-                type="submit"
-                class="px-6 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-lg transition-colors"
-            >
-                Search
-            </button>
-        </form>
-    </div>
-
-    <!-- Featured Properties Header -->
-    <div class="mb-6 flex items-center justify-between">
-        <div>
-            <h2 class="text-2xl font-bold text-gray-900 mb-2">Featured Properties</h2>
-            <p class="text-gray-600">Discover our selected properties</p>
-        </div>
-        <div>
-            <a href="{% url 'property_list' %}" class="inline-flex items-center px-4 py-2 bg-gray-100 hover:bg-gray-200 text-gray-800 rounded-lg border border-gray-300">
-                Show All
-            </a>
+            <form id="search-form" action="{% url 'property_list' %}" method="get"
+                  class="flex flex-col sm:flex-row gap-3 max-w-lg mx-auto">
+                <div class="relative flex-1">
+                    <svg class="absolute left-3.5 top-1/2 -translate-y-1/2 w-5 h-5 text-gray-400" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M21 21l-4.35-4.35M11 19a8 8 0 100-16 8 8 0 000 16z"/>
+                    </svg>
+                    <input type="text" id="search-input" name="location" placeholder="Search by location..."
+                        value="{{ query }}" autocomplete="off"
+                        class="w-full pl-11 pr-4 py-3 bg-white rounded-xl text-gray-800 placeholder:text-gray-400 border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none text-sm shadow-sm">
+                </div>
+                <button type="submit" id="search-btn"
+                    class="px-7 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors text-sm">
+                    Search
+                </button>
+            </form>
         </div>
     </div>
+</section>
 
-    <!-- Property Grid Container -->
-    <div id="property-grid-container">
+<!-- Featured Properties -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 mb-8 animate-fade-in">
+        <div>
+            <h2 class="text-2xl font-bold text-gray-900 tracking-tight">Featured Properties</h2>
+            <p class="mt-1 text-gray-500 text-sm">Discover our hand-picked selection</p>
+        </div>
+        <a href="{% url 'property_list' %}"
+           class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-semibold text-primary-700 bg-primary-50 hover:bg-primary-100 border border-primary-200 rounded-xl transition-colors">
+            Browse all
+            <svg class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
+            </svg>
+        </a>
+    </div>
+
+    <div id="property-grid-container" class="animate-fade-in" style="animation-delay: 0.1s">
         {% include "property_grid.html" %}
     </div>
-</div>
+</section>
 
 {% endblock %}
-
