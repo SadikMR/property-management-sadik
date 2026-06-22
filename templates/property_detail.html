@@ -5,25 +5,54 @@
 <h1>{{ property.title }}</h1>
 
 <p>
-    Type: {{ property.property_type }}
+    <strong>Type:</strong>
+    {{ property.property_type }}
 </p>
 
 <p>
-    Price: {{ property.price }}
+    <strong>Price:</strong>
+    {{ property.price }}
 </p>
 
 <p>
-    Location: {{ property.location.name }}
+    <strong>Location:</strong>
+    {{ property.location.name }}
 </p>
 
 <p>
-    Description:
+    <strong>Description:</strong>
     {{ property.description }}
 </p>
 
 <p>
-    Amenities:
+    <strong>Amenities:</strong>
     {{ property.amenities }}
 </p>
+
+<hr>
+
+<h2>Images</h2>
+
+{% for image in property.images.all %}
+
+    {% if image.image %}
+        <div>
+            <img
+                src="{{ image.image.url }}"
+                alt="{{ image.caption }}"
+                width="500"
+            >
+
+            {% if image.caption %}
+                <p>{{ image.caption }}</p>
+            {% endif %}
+        </div>
+    {% endif %}
+
+{% empty %}
+
+    <p>No images available.</p>
+
+{% endfor %}
 
 {% endblock %}

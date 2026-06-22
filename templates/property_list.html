@@ -2,6 +2,14 @@
 
 <div>
 
+    {% if property.images.first %}
+        <img
+            src="{{ property.images.first.image.url }}"
+            alt="{{ property.title }}"
+            width="250"
+        >
+    {% endif %}
+
     <h3>
         <a href="{% url 'property_detail' property.slug %}">
             {{ property.title }}
@@ -13,18 +21,27 @@
     </p>
 
     <p>
-        {{ property.price }}
+        Price: {{ property.price }}
     </p>
 
     <p>
-        {{ property.location.name }}
+        Location: {{ property.location.name }}
+    </p>
+
+    <p>
+        {{ property.description|truncatechars:100 }}
     </p>
 
 </div>
 
 <hr>
 
-<hr>
+{% empty %}
+
+<p>No properties found.</p>
+
+{% endfor %}
+
 
 <div>
 
@@ -53,5 +70,3 @@
     {% endif %}
 
 </div>
-
-{% endfor %}
