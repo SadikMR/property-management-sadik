@@ -1,72 +1,68 @@
-{% for property in page_obj %}
+{% extends "base.html" %}
 
-<div>
+{% block content %}
 
-    {% if property.images.first %}
-        <img
-            src="{{ property.images.first.image.url }}"
-            alt="{{ property.title }}"
-            width="250"
-        >
+<div class="max-w-6xl mx-auto px-4 py-12">
+
+    <div class="flex items-center justify-between mb-6">
+        <div>
+            {% if query %}
+                <h1 class="text-2xl font-bold text-gray-900">Search results for "{{ query }}"</h1>
+                <p class="text-gray-600">Properties that match your search</p>
+            {% else %}
+                <h1 class="text-2xl font-bold text-gray-900">All Properties</h1>
+                <p class="text-gray-600">Browse all available properties</p>
+            {% endif %}
+        </div>
+
+        <div>
+            <a href="{% url 'property_list' %}" class="inline-flex items-center px-4 py-2 bg-emerald-700 hover:bg-emerald-800 text-white font-medium rounded-lg">
+                Show All
+            </a>
+        </div>
+    </div>
+
+    {% if page_obj.object_list %}
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            {% for property in page_obj %}
+                <div class="bg-white rounded-lg shadow-md overflow-hidden">
+                    {% if property.images.first %}
+                        <img src="{{ property.images.first.image.url }}" alt="{{ property.title }}" class="w-full h-48 object-cover">
+                    {% else %}
+                        <div class="w-full h-48 bg-gray-100 flex items-center justify-center text-gray-400">No image</div>
+                    {% endif %}
+
+                    <div class="p-4">
+                        <h2 class="text-lg font-semibold text-gray-900 mb-1">
+                            <a href="{% url 'property_detail' property.slug %}">{{ property.title }}</a>
+                        </h2>
+                        <p class="text-sm text-gray-500 mb-2">{{ property.property_type }} • {{ property.location.name }}</p>
+                        <p class="text-emerald-700 font-bold mb-2">{{ property.price }}</p>
+                        <p class="text-gray-700 text-sm mb-4">{{ property.description|truncatechars:120 }}</p>
+                        <a href="{% url 'property_detail' property.slug %}" class="inline-block px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded">View</a>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% else %}
+        <p class="text-gray-600">No properties found.</p>
     {% endif %}
 
-    <h3>
-        <a href="{% url 'property_detail' property.slug %}">
-            {{ property.title }}
-        </a>
-    </h3>
+    <!-- Pagination -->
+    <div class="mt-8 flex items-center justify-center gap-2">
+        {% if page_obj.has_previous %}
+            <a href="?location={{ query }}&page=1" class="px-3 py-1 bg-white border rounded">First</a>
+            <a href="?location={{ query }}&page={{ page_obj.previous_page_number }}" class="px-3 py-1 bg-white border rounded">Previous</a>
+        {% endif %}
 
-    <p>
-        {{ property.property_type }}
-    </p>
+        <span class="px-3 py-1">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
 
-    <p>
-        Price: {{ property.price }}
-    </p>
-
-    <p>
-        Location: {{ property.location.name }}
-    </p>
-
-    <p>
-        {{ property.description|truncatechars:100 }}
-    </p>
+        {% if page_obj.has_next %}
+            <a href="?location={{ query }}&page={{ page_obj.next_page_number }}" class="px-3 py-1 bg-white border rounded">Next</a>
+            <a href="?location={{ query }}&page={{ page_obj.paginator.num_pages }}" class="px-3 py-1 bg-white border rounded">Last</a>
+        {% endif %}
+    </div>
 
 </div>
 
-<hr>
-
-{% empty %}
-
-<p>No properties found.</p>
-
-{% endfor %}
-
-
-<div>
-
-    {% if page_obj.has_previous %}
-        <a href="?location={{ query }}&page=1">
-            First
-        </a>
-
-        <a href="?location={{ query }}&page={{ page_obj.previous_page_number }}">
-            Previous
-        </a>
-    {% endif %}
-
-    Page {{ page_obj.number }}
-    of
-    {{ page_obj.paginator.num_pages }}
-
-    {% if page_obj.has_next %}
-        <a href="?location={{ query }}&page={{ page_obj.next_page_number }}">
-            Next
-        </a>
-
-        <a href="?location={{ query }}&page={{ page_obj.paginator.num_pages }}">
-            Last
-        </a>
-    {% endif %}
-
-</div>
+{% endblock %}

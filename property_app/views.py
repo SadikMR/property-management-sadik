@@ -18,10 +18,31 @@ from .models import (
 
 
 def home(request):
-    return render(
-        request,
-        "home.html",
-    )
+    query = request.GET.get("search", "")
+
+    if query:
+        locations = Location.objects.filter(
+            name__icontains=query
+        )
+        properties = Property.objects.filter(
+            location__in=locations
+        )
+    else:
+        properties = Property.objects.all()
+
+    paginator = Paginator(properties, 6)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
+
+    context = {
+        "query": query,
+        "page_obj": page_obj,
+    }
+
+    if request.headers.get("X-Requested-With") == "XMLHttpRequest":
+        return render(request, "property_grid.html", context)
+
+    return render(request, "home.html", context)
 
 
 def property_list(request):
@@ -40,7 +61,7 @@ def property_list(request):
 
     paginator = Paginator(
         properties,
-        2
+        9
     )
 
     page_number = request.GET.get(
