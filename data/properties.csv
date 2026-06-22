@@ -1,6 +1,6 @@
-country,city,location_name,property_name,description,amenities,latitude,longitude
-Bangladesh,Dhaka,Gulshan,Luxury Apartment,Modern apartment in Gulshan,WiFi;Pool;Parking,23.7925,90.4078
-Bangladesh,Dhaka,Banani,Modern Condo,Comfortable condo near Banani Lake,WiFi;Gym;Parking,23.7937,90.4066
-Bangladesh,Dhaka,Dhanmondi,Lake View Flat,Beautiful lake view property,WiFi;Balcony,23.7465,90.3760
-USA,Florida,Destin,Beach House,Luxury beach house with ocean access,Pool;Beach Access;WiFi,30.3935,-86.4958
-USA,Florida,Miami,Oceanfront Villa,Oceanfront villa with private pool,Pool;WiFi;Parking;Gym,25.7617,-80.1918
+country,city,location_name,property_title,slug,property_type,price,description,amenities,latitude,longitude
+Bangladesh,Dhaka,Gulshan,Luxury Apartment,luxury-apartment,Apartment,120000,Modern apartment in Gulshan,WiFi;Pool;Parking,23.7925,90.4078
+Bangladesh,Dhaka,Banani,Modern Condo,modern-condo,Condo,95000,Comfortable condo near Banani Lake,WiFi;Gym;Parking,23.7937,90.4066
+Bangladesh,Dhaka,Dhanmondi,Lake View Flat,lake-view-flat,Apartment,85000,Beautiful lake view property,WiFi;Balcony,23.7465,90.3760
+USA,Florida,Destin,Beach House,beach-house,House,450000,Luxury beach house with ocean access,Pool;Beach Access;WiFi,30.3935,-86.4958
+USA,Florida,Miami,Oceanfront Villa,oceanfront-villa,Villa,750000,Oceanfront villa with private pool,Pool;WiFi;Parking;Gym,25.7617,-80.1918

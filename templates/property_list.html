@@ -1,5 +1,27 @@
-{% extends "base.html" %}
+{% for property in properties %}
 
-{% block content %}
-<h1>Property Content</h1>
-{% endblock %}
+<div>
+
+    <h3>
+        <a href="{% url 'property_detail' property.slug %}">
+            {{ property.title }}
+        </a>
+    </h3>
+
+    <p>
+        {{ property.property_type }}
+    </p>
+
+    <p>
+        {{ property.price }}
+    </p>
+
+    <p>
+        {{ property.location.name }}
+    </p>
+
+</div>
+
+<hr>
+
+{% endfor %}

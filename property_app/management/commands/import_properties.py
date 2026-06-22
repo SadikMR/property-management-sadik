@@ -22,16 +22,19 @@ class Command(BaseCommand):
 
         for _, row in df.iterrows():
 
-            location, location_created = Location.objects.get_or_create(
-                country=row["country"],
-                city=row["city"],
-                name=row["location_name"],
-                defaults={
-                    "center": Point(
-                        float(row["longitude"]),
-                        float(row["latitude"]),
-                    )
-                },
+            location, location_created = (
+                Location.objects.get_or_create(
+                    country=row["country"],
+                    city=row["city"],
+                    name=row["location_name"],
+                    defaults={
+                        "center": Point(
+                            float(row["longitude"]),
+                            float(row["latitude"]),
+                            srid=4326,
+                        )
+                    },
+                )
             )
 
             if location_created:
@@ -39,12 +42,16 @@ class Command(BaseCommand):
 
             Property.objects.create(
                 location=location,
-                name=row["property_name"],
+                title=row["property_title"],
+                slug=row["slug"],
+                property_type=row["property_type"],
+                price=row["price"],
                 description=row["description"],
                 amenities=row["amenities"],
                 center=Point(
                     float(row["longitude"]),
                     float(row["latitude"]),
+                    srid=4326,
                 ),
             )
 

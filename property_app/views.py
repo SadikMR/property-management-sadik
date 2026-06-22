@@ -1,13 +1,20 @@
-from django.shortcuts import render
-from django.db.models import Q
+from django.shortcuts import (
+    render,
+    get_object_or_404,
+)
 
 from .models import (
     Location,
     Property,
 )
 
+
 def home(request):
-    return render(request, "home.html")
+    return render(
+        request,
+        "home.html",
+    )
+
 
 def property_list(request):
     query = request.GET.get(
@@ -16,9 +23,7 @@ def property_list(request):
     )
 
     locations = Location.objects.filter(
-        Q(name__icontains=query)
-        |
-        Q(city__icontains=query)
+        name__icontains=query
     )
 
     properties = Property.objects.filter(
@@ -29,13 +34,22 @@ def property_list(request):
         request,
         "property_list.html",
         {
-            "properties": properties,
             "query": query,
+            "properties": properties,
         },
     )
 
+
 def property_detail(request, slug):
+    property = get_object_or_404(
+        Property,
+        slug=slug
+    )
+
     return render(
         request,
         "property_detail.html",
+        {
+            "property": property,
+        },
     )

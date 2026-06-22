@@ -1,5 +1,29 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1>Property Detail</h1>
+
+<h1>{{ property.title }}</h1>
+
+<p>
+    Type: {{ property.property_type }}
+</p>
+
+<p>
+    Price: {{ property.price }}
+</p>
+
+<p>
+    Location: {{ property.location.name }}
+</p>
+
+<p>
+    Description:
+    {{ property.description }}
+</p>
+
+<p>
+    Amenities:
+    {{ property.amenities }}
+</p>
+
 {% endblock %}
