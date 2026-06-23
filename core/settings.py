@@ -32,6 +32,7 @@ INSTALLED_APPS = [
     'pgvector.django',
 
     'property_app',
+    'django.contrib.postgres',
 ]
 
 MIDDLEWARE = [

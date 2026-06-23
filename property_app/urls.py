@@ -1,4 +1,7 @@
 from django.urls import path
+from property_app.views import (
+    LocationAutocompleteAPIView,
+)
 
 from . import views
 
@@ -9,6 +12,11 @@ urlpatterns = [
         "property/<slug:slug>/",
         views.property_detail,
         name="property_detail",
-    )
+    ),
+    path(
+        "locations/autocomplete/",
+        LocationAutocompleteAPIView.as_view(),
+        name="location-autocomplete",
+    ),
          
 ]
