@@ -34,7 +34,7 @@ def home(request):
 
         properties = Property.objects.filter(location__in=locations)
     else:
-        properties = Property.objects.all()
+        properties = Property.objects.all().order_by('-id')
 
     paginator = Paginator(properties, 6)
     page_number = request.GET.get("page")
@@ -114,8 +114,7 @@ class LocationAutocompleteAPIView(APIView):
 
         if not query:
             return Response([])
-        # For short queries, avoid loading the embedding model — use fast text match
-        # Always use semantic search as requested by instructor
+
         locations = semantic_location_search(
             query=query,
             limit=5,
