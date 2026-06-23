@@ -114,19 +114,13 @@ class LocationAutocompleteAPIView(APIView):
 
         if not query:
             return Response([])
-
+        # For short queries, avoid loading the embedding model — use fast text match
+        # Always use semantic search as requested by instructor
         locations = semantic_location_search(
             query=query,
             limit=5,
         )
 
-        serializer = (
-            LocationAutocompleteSerializer(
-                locations,
-                many=True,
-            )
-        )
+        serializer = LocationAutocompleteSerializer(locations, many=True)
 
-        return Response(
-            serializer.data
-        )
+        return Response(serializer.data)

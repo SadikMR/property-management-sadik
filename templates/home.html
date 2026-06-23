@@ -36,10 +36,9 @@
                     const suggestionsBox = document.getElementById('autocomplete-suggestions');
                     const searchForm = document.getElementById('search-form');
                     const autocompleteUrl = '{% url "location-autocomplete" %}';
-                    let hideTimeout = null;
 
                     function renderSuggestions(locations) {
-                        if (!locations.length) {
+                        if (!locations || !locations.length) {
                             suggestionsBox.classList.add('hidden');
                             suggestionsBox.innerHTML = '';
                             return;
@@ -55,12 +54,6 @@
                     }
 
                     function fetchSuggestions(query) {
-                        if (!query || query.length < 2) {
-                            suggestionsBox.classList.add('hidden');
-                            suggestionsBox.innerHTML = '';
-                            return;
-                        }
-
                         fetch(`${autocompleteUrl}?q=${encodeURIComponent(query)}`)
                             .then(response => response.json())
                             .then(data => renderSuggestions(data))
@@ -70,6 +63,7 @@
                             });
                     }
 
+                    // Immediate semantic search on every input (no debounce, no length checks)
                     searchInput.addEventListener('input', function () {
                         fetchSuggestions(this.value.trim());
                     });
@@ -84,21 +78,13 @@
                     });
 
                     searchInput.addEventListener('focus', function () {
-                        if (searchInput.value.trim().length >= 2) {
-                            fetchSuggestions(searchInput.value.trim());
-                        }
+                        fetchSuggestions(searchInput.value.trim());
                     });
 
                     searchInput.addEventListener('blur', function () {
-                        hideTimeout = window.setTimeout(() => {
+                        setTimeout(() => {
                             suggestionsBox.classList.add('hidden');
                         }, 150);
-                    });
-
-                    suggestionsBox.addEventListener('mousedown', function (event) {
-                        if (hideTimeout) {
-                            clearTimeout(hideTimeout);
-                        }
                     });
                 });
             </script>
