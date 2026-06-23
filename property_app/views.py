@@ -10,6 +10,16 @@ from .models import (
     Property,
 )
 
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from property_app.serializers import (
+    LocationAutocompleteSerializer,
+)
+from property_app.services.search import (
+    semantic_location_search,
+)
+
+
 
 def home(request):
     query = request.GET.get("search", "")
@@ -99,3 +109,31 @@ def property_detail(request, slug):
             "amenities_list": amenities_list,
         },
     )
+    
+
+class LocationAutocompleteAPIView(APIView):
+
+    def get(self, request):
+        query = request.GET.get(
+            "q",
+            ""
+        ).strip()
+
+        if not query:
+            return Response([])
+
+        locations = semantic_location_search(
+            query=query,
+            limit=5,
+        )
+
+        serializer = (
+            LocationAutocompleteSerializer(
+                locations,
+                many=True,
+            )
+        )
+
+        return Response(
+            serializer.data
+        )
