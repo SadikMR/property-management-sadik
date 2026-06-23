@@ -1,124 +1,160 @@
 # Property Management
 
-A Django app for managing property listings with location-based search. Uses PostGIS for geospatial queries and pgvector for semantic search.
+A Django property listing app with geospatial search and semantic location matching.
 
-## Tech Stack
-
-- Django + Django REST Framework
-- PostgreSQL with PostGIS and pgvector extensions
-- Docker
-
-## Getting Started
-
-Clone the repo and cd into it:
+## Quick Start
 
 ```bash
 git clone https://github.com/SadikMR/property-management-sadik.git
 cd property-management-sadik
-```
-
-Copy the example env file and update values:
-
-```bash
 cp .env.example .env
 ```
+- clones the repository and prepares local configuration.
 
-Open `.env` and set your own `DJANGO_SECRET_KEY` and `POSTGRES_PASSWORD`. The defaults work fine for local dev.
-
-Build and start everything:
+Edit `.env` and set `DJANGO_SECRET_KEY`, `POSTGRES_PASSWORD`, and other required values.
 
 ```bash
-docker compose up --build
+docker compose up --build -d
 ```
-
-First time setup — run migrations and import sample data:
+- builds the Docker images and starts the services in the background.
+- use this the first time or after changing Dockerfile / dependencies.
 
 ```bash
 docker compose exec django python manage.py migrate
+```
+- applies Django database migrations inside the running container.
+
+```bash
 docker compose exec django python manage.py import_properties
 ```
+- imports sample property and location data from `data/properties.csv`.
 
-App runs at http://localhost:8000
-
-## Project Structure
-
+```bash
+docker compose exec django python manage.py createsuperuser
 ```
-├── core/                  # django project settings
-├── property_app/          # main app (models, views, urls)
-├── templates/             # html templates
-├── data/                  # csv data for import
-├── docker/
-│   ├── Dockerfile         # postgres + django images
-│   └── init.sql           # auto-creates postgis & vector extensions
-├── docker-compose.yml
-├── .env                   # secrets (not committed)
-├── .env.example           # template for .env
-└── requirements.txt
+- creates the Django admin user for managing properties and images.
+
+Open the app at `http://localhost:8000`
+
+### After first setup
+
+For normal development, use:
+
+```bash
+docker compose up -d
 ```
 
-## Environment Variables
+- starts the existing containers in the background.
+- do not use `--build` every time unless you change Dockerfile or dependencies.
 
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `DJANGO_SECRET_KEY` | Django secret key | insecure dev key |
-| `DJANGO_DEBUG` | Debug mode | `True` |
-| `DJANGO_ALLOWED_HOSTS` | Allowed hosts | `*` |
-| `POSTGRES_USER` | DB username | `postgres` |
-| `POSTGRES_PASSWORD` | DB password | — |
-| `POSTGRES_DB` | DB name | `appdb` |
-| `POSTGRES_HOST` | DB host | `postgres` |
-| `POSTGRES_PORT` | DB port | `5432` |
+## What This Project Does
 
-## About the App
+- Stores locations and properties in PostgreSQL
+- Uses PostGIS to store geospatial coordinates and support location-based queries
+- Uses pgvector to store embeddings for semantic location matching
+- Uses sentence-transformers to generate location embeddings from text
+- Provides homepage autocomplete that queries semantic locations via API
+- Offers a property listing page and a property detail page
+- Uses pandas to import property/ location data from CSV
+- Provides Django admin with inline property image upload via `PropertyImageInline`
 
-The app stores properties with their geographic coordinates. Each property belongs to a location (like "Manhattan" or "Dubai"), and each location belongs to a country.
+## URL examples
 
-Properties are imported from `data/properties.csv` using `python manage.py import_properties`. Each row creates a Location (with a center point) and a Property (with its own coordinates). PostGIS handles storing geo points and calculating distances. pgvector is set up for semantic search on location names using embeddings.
+- Home: `http://localhost:8000/`
+- Search page: `http://localhost:8000/search/?location=Manhattan`
+- Autocomplete API: `http://localhost:8000/locations/autocomplete/?q=Manhattan`
 
-**Pages:**
+## How semantic search works here
 
-- `/` — home page, shows all properties in a paginated grid. Search by location name, grid updates via AJAX without full page reload.
-- `/search/?location=...` — filters properties by location name with pagination.
-- `/property/<slug>/` — property detail page with price, type, description, amenities, and distance from location center.
+1. `import_properties` reads `data/properties.csv` with pandas.
+2. Locations are created with `name_embedding` vectors from `property_app/services/embedding.py`.
+3. When the frontend sends an autocomplete query, the API calls `semantic_location_search` in `property_app/services/search.py`.
+4. That function uses `pgvector` cosine distance to find locations whose stored embeddings are closest to the query embedding.
+5. The API returns matching locations through `LocationAutocompleteSerializer`.
+
+
+## Key Components
+
+- `property_app/models.py`
+  - `Location` stores `name`, `country`, `center`, and `name_embedding`
+  - `Property` stores `title`, `slug`, `property_type`, `price`, `description`, `amenities`, and `center`
+  - `PropertyImage` stores images uploaded for a property
+
+- `property_app/services/embedding.py`
+  - Loads `sentence-transformers/all-MiniLM-L6-v2`
+  - Generates embeddings for location names
+
+- `property_app/services/search.py`
+  - Performs semantic location lookup using `pgvector` cosine distance
+  - Returns the nearest matching locations for a typed query
+
+- `property_app/serializers.py`
+  - Defines `LocationAutocompleteSerializer`
+  - Serializes autocomplete results returned by the API
+
+- `property_app/management/commands/import_properties.py`
+  - Reads `data/properties.csv` with `pandas`
+  - Creates `Location` and `Property` records
+  - Stores location embeddings on import
+
+- `property_app/admin.py`
+  - Registers `Property` and `PropertyImage`
+  - Adds `PropertyImageInline` so images can be uploaded directly on the Property admin page
+
+## Search and UI
+
+- Homepage search uses semantic autocomplete, so typed location names match related locations even if the words are not exact.
+- Autocomplete data comes from `LocationAutocompleteAPIView` in `property_app/views.py`.
+- The homepage uses `templates/home.html` for search input and featured property grid.
+- Property listing results appear in `templates/property_list.html`.
+- Property detail pages show each listing with price, amenities, and location details.
+
+## Infrastructure
+
+- `docker-compose.yml` runs the Django app and PostgreSQL/PostGIS container.
+- `docker/init.sql` creates PostGIS and pgvector extensions in the database.
+- `core/settings.py` configures `MEDIA_ROOT`, `MEDIA_URL`, and database connection settings.
 
 ## Useful Commands
 
 ```bash
-# stop everything
-docker compose down
+# start services (foreground)
+docker compose up
 
-# restart
-docker compose down && docker compose up --build
+# start services in background
+docker compose up -d
 
-# run in background
-docker compose up --build -d
-
-# check running containers
-docker compose ps
-
-# view logs
-docker compose logs -f
-
-# view logs for a specific service
-docker compose logs -f django
-docker compose logs -f postgres
-
-# open django shell
-docker compose exec django python manage.py shell
-
-# create superuser
-docker compose exec django python manage.py createsuperuser
+# restart services
+docker compose restart
 
 # run migrations
 docker compose exec django python manage.py migrate
 
-# connect to database
-docker compose exec postgres psql -U postgres -d appdb
+# import data
+docker compose exec django python manage.py import_properties
 
-# check installed extensions
-docker compose exec postgres psql -U postgres -d appdb -c "\dx"
+# create admin user
+docker compose exec django python manage.py createsuperuser
 
-# fresh start (deletes all data)
-docker compose down -v
-docker compose up --build
+# run shell
+docker compose exec django python manage.py shell
+
+# stop services
+docker compose down
+
+# rebuild and restart after Dockerfile or dependency changes
+docker compose down && docker compose up --build
+```
+
+## Project Structure
+
+```
+├── core/                 # Django project settings and URL config
+├── property_app/         # main app: models, views, serializers, admin, search logic
+├── templates/            # UI templates for home, listing, detail pages
+├── data/                 # CSV source used by import_properties command
+├── docker/               # Docker build files and DB init script
+├── docker-compose.yml   # service definitions
+├── README.md
+├── requirements.txt
 ```

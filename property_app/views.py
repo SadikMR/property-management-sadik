@@ -22,17 +22,19 @@ from property_app.services.search import (
 
 
 def home(request):
-    query = request.GET.get("search", "")
+    query = request.GET.get("location", "").strip()
 
     if query:
-        locations = Location.objects.filter(
-            name__icontains=query
-        )
-        properties = Property.objects.filter(
-            location__in=locations
-        )
+        locations = list(semantic_location_search(
+            query=query,
+            limit=10,
+        ))
+        if not locations:
+            locations = Location.objects.filter(name__icontains=query)
+
+        properties = Property.objects.filter(location__in=locations)
     else:
-        properties = Property.objects.all()
+        properties = Property.objects.all().order_by('-id')
 
     paginator = Paginator(properties, 6)
     page_number = request.GET.get("page")
@@ -44,33 +46,24 @@ def home(request):
     })
 
 
-
 def property_list(request):
-    query = request.GET.get(
-        "location",
-        ""
-    )
+    query = request.GET.get("location", "").strip()
 
-    locations = Location.objects.filter(
-        name__icontains=query
-    )
+    if query:
+        locations = list(semantic_location_search(
+            query=query,
+            limit=15,
+        ))
+        if not locations:
+            locations = Location.objects.filter(name__icontains=query)
 
-    properties = Property.objects.filter(
-        location__in=locations
-    )
+        properties = Property.objects.filter(location__in=locations)
+    else:
+        properties = Property.objects.all()
 
-    paginator = Paginator(
-        properties,
-        9
-    )
-
-    page_number = request.GET.get(
-        "page"
-    )
-
-    page_obj = paginator.get_page(
-        page_number
-    )
+    paginator = Paginator(properties, 9)
+    page_number = request.GET.get("page")
+    page_obj = paginator.get_page(page_number)
 
     return render(
         request,
@@ -127,13 +120,6 @@ class LocationAutocompleteAPIView(APIView):
             limit=5,
         )
 
-        serializer = (
-            LocationAutocompleteSerializer(
-                locations,
-                many=True,
-            )
-        )
+        serializer = LocationAutocompleteSerializer(locations, many=True)
 
-        return Response(
-            serializer.data
-        )
+        return Response(serializer.data)

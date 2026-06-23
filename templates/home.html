@@ -3,7 +3,7 @@
 {% block content %}
 
 <!-- Hero — light warm background -->
-<section class="bg-primary-50 border-b border-primary-100">
+<section class="bg-primary-50 border-b border-primary-100 relative z-20">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20 sm:py-24">
         <div class="max-w-2xl mx-auto text-center animate-fade-in">
             <h1 class="text-3xl sm:text-4xl font-extrabold text-gray-900 leading-tight tracking-tight mb-3">
@@ -22,12 +22,72 @@
                     <input type="text" id="search-input" name="location" placeholder="Search by location..."
                         value="{{ query }}" autocomplete="off"
                         class="w-full pl-11 pr-4 py-3 bg-white rounded-xl text-gray-800 placeholder:text-gray-400 border border-gray-200 focus:ring-2 focus:ring-primary-400 focus:border-primary-400 outline-none text-sm shadow-sm">
+                    <div id="autocomplete-suggestions" class="hidden absolute z-20 left-0 right-0 mt-1 bg-white border border-gray-200 rounded-2xl shadow-lg overflow-hidden text-sm"></div>
                 </div>
                 <button type="submit" id="search-btn"
                     class="px-7 py-3 bg-primary-600 hover:bg-primary-700 text-white font-semibold rounded-xl transition-colors text-sm">
                     Search
                 </button>
             </form>
+
+            <script>
+                document.addEventListener('DOMContentLoaded', function () {
+                    const searchInput = document.getElementById('search-input');
+                    const suggestionsBox = document.getElementById('autocomplete-suggestions');
+                    const searchForm = document.getElementById('search-form');
+                    const autocompleteUrl = '{% url "location-autocomplete" %}';
+
+                    function renderSuggestions(locations) {
+                        if (!locations || !locations.length) {
+                            suggestionsBox.classList.add('hidden');
+                            suggestionsBox.innerHTML = '';
+                            return;
+                        }
+
+                        suggestionsBox.classList.remove('hidden');
+                        suggestionsBox.innerHTML = locations.map(location => `
+                            <button type="button" class="w-full text-left px-4 py-3 hover:bg-primary-50 focus:bg-primary-50 transition-colors outline-none" data-name="${location.name}">
+                                <span class="font-medium text-gray-900">${location.name}</span>
+                                <span class="block text-xs text-gray-500">${location.country || ''}</span>
+                            </button>
+                        `).join('');
+                    }
+
+                    function fetchSuggestions(query) {
+                        fetch(`${autocompleteUrl}?q=${encodeURIComponent(query)}`)
+                            .then(response => response.json())
+                            .then(data => renderSuggestions(data))
+                            .catch(() => {
+                                suggestionsBox.classList.add('hidden');
+                                suggestionsBox.innerHTML = '';
+                            });
+                    }
+
+                    // Immediate semantic search on every input (no debounce, no length checks)
+                    searchInput.addEventListener('input', function () {
+                        fetchSuggestions(this.value.trim());
+                    });
+
+                    suggestionsBox.addEventListener('click', function (event) {
+                        const button = event.target.closest('button[data-name]');
+                        if (!button) return;
+
+                        searchInput.value = button.dataset.name;
+                        suggestionsBox.classList.add('hidden');
+                        searchForm.submit();
+                    });
+
+                    searchInput.addEventListener('focus', function () {
+                        fetchSuggestions(searchInput.value.trim());
+                    });
+
+                    searchInput.addEventListener('blur', function () {
+                        setTimeout(() => {
+                            suggestionsBox.classList.add('hidden');
+                        }, 150);
+                    });
+                });
+            </script>
         </div>
     </div>
 </section>
