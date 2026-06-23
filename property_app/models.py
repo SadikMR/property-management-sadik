@@ -1,5 +1,9 @@
 from django.contrib.gis.db import models
-from pgvector.django import VectorField
+
+from pgvector.django import (
+    VectorField,
+    HnswIndex,
+)
 
 
 class Location(models.Model):
@@ -22,9 +26,20 @@ class Location(models.Model):
         srid=4326
     )
 
+    class Meta:
+        indexes = [
+            HnswIndex(
+                name="location_embedding_hnsw",
+                fields=["name_embedding"],
+                opclasses=["vector_cosine_ops"],
+                m=16,
+                ef_construction=64,
+            ),
+        ]
+
     def __str__(self):
         return f"{self.name}, {self.country}"
-
+    
 
 class Property(models.Model):
     location = models.ForeignKey(
