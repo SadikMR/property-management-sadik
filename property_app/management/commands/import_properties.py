@@ -8,6 +8,9 @@ from property_app.models import (
     Location,
     Property,
 )
+from property_app.services.embedding import (
+    generate_embedding,
+)
 
 
 class Command(BaseCommand):
@@ -32,7 +35,10 @@ class Command(BaseCommand):
                             float(row["location_longitude"]),
                             float(row["location_latitude"]),
                             srid=4326,
-                        )
+                        ),
+                        "name_embedding": generate_embedding(
+                            row["location_name"]
+                        ),
                     },
                 )
             )
